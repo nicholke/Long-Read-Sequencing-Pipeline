@@ -25,8 +25,6 @@ output_directory is the path to the directory where the aligned bam file will be
 path_to_reference is the path to the reference genome
 input_bam_file is the path to the input PacBio HiFi bam file
 ## 2. Generate alignment stats using samtools
-bash
-Copy code
 samtools stats {output_directory}/aligned.bam > {output_directory}/aligned.stats
 This generates the alignment statistics for the aligned bam file, which can be used for QC purposes.
 
