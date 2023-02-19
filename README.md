@@ -1,16 +1,16 @@
 # PacBio-Hifi-Sequencing-Pipeline
 This document outlines the steps to process a PacBio HiFi bam file using pbmm2 for alignment to GRCh38, generate alignment stats, call structural variants using pbsv, and call small variants using DeepVariant.
 
-# Requirements
-PacBio HiFi bam file
-pbmm2
-GRCh38 reference genome
-samtools
-bedtools
-pbsv
-DeepVariant
-GATK
-# Steps
+## Requirements
+* PacBio HiFi bam file
+* pbmm2
+* GRCh38 reference genome
+* samtools
+* bedtools
+* pbsv
+* DeepVariant
+* GATK
+## Steps
 ## 1. Align PacBio HiFi reads to GRCh38 reference genome using pbmm2
 bash
 Copy code
