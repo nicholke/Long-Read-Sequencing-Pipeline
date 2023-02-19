@@ -3,6 +3,7 @@ This document outlines the steps to process a PacBio HiFi bam file using pbmm2 f
 
 ## Requirements
 * PacBio HiFi bam file
+* Snakemake
 * pbmm2
 * GRCh38 reference genome
 * samtools
@@ -30,8 +31,7 @@ samtools stats {output_directory}/aligned.bam > {output_directory}/aligned.stats
 This generates the alignment statistics for the aligned bam file, which can be used for QC purposes.
 
 ## 3. Call structural variants using pbsv
-bash
-Copy code
+
 pbsv discover \
 -o {output_directory}/structural_variants.vcf \
 -b {output_directory}/aligned.bam \
@@ -39,8 +39,7 @@ pbsv discover \
 This generates a VCF file of structural variants detected by pbsv.
 
 ## 4. Call small variants using DeepVariant
-bash
-Copy code
+
 # Create a GVCF file
 python deepvariant_runner.py \
 --ref {path_to_reference}/GRCh38.fa \
