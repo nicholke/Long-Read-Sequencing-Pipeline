@@ -40,7 +40,7 @@ This generates a VCF file of structural variants detected by pbsv.
 
 ## 4. Call small variants using DeepVariant
 
-# Create a GVCF file
+## Create a GVCF file
 python deepvariant_runner.py \
 --ref {path_to_reference}/GRCh38.fa \
 --reads {output_directory}/aligned.bam \
@@ -48,7 +48,7 @@ python deepvariant_runner.py \
 --output_gvcf={output_directory}/output.gvcf.gz \
 --num_shards=24
 
-# Joint call the GVCF file
+## Joint call the GVCF file
 gatk --java-options "-Xmx50g" GenotypeGVCFs \
 -R {path_to_reference}/GRCh38.fa \
 -V {output_directory}/output.gvcf.gz \
