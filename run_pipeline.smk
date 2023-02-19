@@ -1,44 +1,40 @@
-# Define samples and input files
-SAMPLES, = glob_wildcards("input/{sample}.bam")
 
-# Define reference genome file
-REF = "reference/GRCh38.fasta"
+configfile: "config.yaml"
 
-# Define output directories
-ALIGN_DIR = "output/align/"
-SNPS_DIR = "output/snps/"
-INDELS_DIR = "output/indels/"
-
-# Define shell command to run pbmm2 for alignment
-rule align:
+rule align_reads:
     input:
-        bam="input/{sample}.bam",
-        ref=REF
+        bam = config["input_bam"],
+        ref = config["reference_genome"]
     output:
-        os.path.join(ALIGN_DIR, "{sample}.sorted.bam")
+        stats = "alignment_stats.txt",
+        bam = "aligned_reads.bam"
     shell:
-        "python align.py {input.bam} {input.ref} {output}"
+        "pbmm2 align {input.bam} {input.ref} {output.bam} && "
+        "samtools stats {output.bam} > {output.stats}"
 
-# Define shell command to call SNPs using DeepVariant
 rule call_snps:
     input:
-        os.path.join(ALIGN_DIR, "{sample}.sorted.bam")
+        bam = "aligned_reads.bam",
+        ref = config["reference_genome"]
     output:
-        os.path.join(SNPS_DIR, "{sample}.vcf")
+        vcf = "snp_calls.vcf"
     shell:
-        "python call_snps.py {input} {REF} {output}"
+        "python call_snps.py {input.bam} {input.ref} {output.vcf}"
 
-# Define shell command to call indels using DeepVariant
 rule call_indels:
     input:
-        os.path.join(ALIGN_DIR, "{sample}.sorted.bam")
+        bam = "aligned_reads.bam",
+        ref = config["reference_genome"]
     output:
-        os.path.join(INDELS_DIR, "{sample}.vcf")
+        vcf = "indel_calls.vcf"
     shell:
-        "python call_indels.py {input} {REF} {output}"
+        "python call_indels.py {input.bam} {input.ref} {output.vcf}"
 
-# Define workflow
-rule all:
+rule call_structural_variants:
     input:
-        expand(os.path.join(SNPS_DIR, "{sample}.vcf"), sample=SAMPLES),
-        expand(os.path.join(INDELS_DIR, "{sample}.vcf"), sample=SAMPLES)
+        bam = "aligned_reads.bam",
+        ref = config["reference_genome"]
+    output:
+        vcf = "structural_variant_calls.vcf"
+    shell:
+        "python call_structural_variants.py {input.bam} {input.ref} {output.vcf}"
